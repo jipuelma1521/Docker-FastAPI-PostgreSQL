@@ -1,11 +1,16 @@
 
-name: CI
+name: CI/CD
 
 on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
+
   test:
     runs-on: ubuntu-latest
 
@@ -38,4 +43,14 @@ jobs:
 
       - name: Construir imagen Docker
         run: |
-          docker build -t scientific-api:latest .
+          docker build -t ghcr.io/jipuelma1521/scientific-api:latest .
+
+      - name: Iniciar sesion en GHCR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Publicar imagen Docker
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          docker push ghcr.io/jipuelma1521/scientific-api:latest

@@ -1,3 +1,4 @@
+
 name: CI
 
 on:
@@ -26,3 +27,15 @@ jobs:
       - name: Ejecutar tests
         run: |
           python -m pytest
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Construir imagen Docker
+        run: |
+          docker build -t scientific-api:latest .

@@ -13,7 +13,7 @@ DB_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 
 @app.get("/")
 def root():
-    return {"mensaje": "FastAPI roto"}
+    return {"mensaje": "FastAPI funcionando dentro de Docker Compose"}
 
 
 @app.get("/experimentos")
